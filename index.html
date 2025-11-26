@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CINE - JMMV</title>
+
+    <style>
+        body {
+            background: #141c2c;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        header {
+            background: #0f1624;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header img {
+            width: 90px;
+        }
+
+        nav {
+            background: #1a2436;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav input {
+            padding: 6px;
+            border-radius: 6px;
+            border: none;
+            width: 180px;
+        }
+
+        nav button {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: none;
+            background:#0d6efd;
+            color:white;
+            cursor:pointer;
+        }
+
+        .contenedor {
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            align-items: start;
+        }
+
+        .item {
+            background: #1d2a3b;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .poster {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .btn-desc {
+            background: #0d6efd;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+
+        .descripcion {
+            display: none;
+            background: #17202c;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .contacto {
+            background: #0f1624;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+                /* NAVEGACIÓN */
+        nav {
+            background: var(--color-nav);
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            align-items: center;
+
+            /* === NAV SIEMPRE VISIBLE === */
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header id="inicio">
+        <img src="CJMMV.png" alt="Logo">
+        <h1>CINE - JMMV</h1>
+    </header>
+
+    <nav>
+        <a href="#inicio" id="linkInicio">Inicio</a>
+        <a href="#peliculas">Películas</a>
+        <a href="#contacto">Contacto</a>
+
+        <input type="text" id="buscar" placeholder="Buscar película...">
+        <button id="btnBuscar">Buscar</button>
+    </nav>
+
+    <div class="contenedor">
+        <h2 id="peliculas">Películas Recientes</h2>
+        <div class="grid" id="contenedor-peliculas"></div>
+    </div>
+
+    <div class="contacto" id="contacto">
+        <p>Teléfono: <strong>79135310</strong></p>
+        <p>Desarrollado por JMMV</p>
+    </div>
+
+    <script>
+        const API_KEY = "912dd0733c76e627da6361f7bc7a8797";
+
+        const contenedor = document.getElementById("contenedor-peliculas");
+        const inputBuscar = document.getElementById("buscar");
+        const btnBuscar = document.getElementById("btnBuscar");
+        const linkInicio = document.getElementById("linkInicio");
+
+        let todasLasPeliculas = [];
+        const TOTAL_PAGINAS = 3; // Cantidad de páginas a cargar
+
+        // Carga inicial de películas (múltiples páginas)
+        async function cargarPeliculas() {
+            for (let i = 1; i <= TOTAL_PAGINAS; i++) {
+                const url = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-ES&page=${i}`;
+                try {
+                    const resp = await fetch(url);
+                    const data = await resp.json();
+                    if (data && data.results) {
+                        todasLasPeliculas = todasLasPeliculas.concat(data.results);
+                    }
+                } catch (error) {
+                    console.error("Error al cargar películas:", error);
+                }
+            }
+            mostrarPeliculas(todasLasPeliculas);
+        }
+
+        cargarPeliculas();
+
+        // Muestra una lista de películas en pantalla
+        function mostrarPeliculas(peliculas) {
+            contenedor.innerHTML = "";
+
+            if (!peliculas || peliculas.length === 0) {
+                contenedor.innerHTML = "<p>No se encontraron películas.</p>";
+                return;
+            }
+
+            peliculas.forEach(p => {
+                const poster = p.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${p.poster_path}`
+                    : "https://via.placeholder.com/500x750?text=Sin+Imagen";
+
+                const trailerUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(p.title + " trailer")}`;
+
+                const item = document.createElement("div");
+                item.classList.add("item");
+
+                const enlace = document.createElement("a");
+                enlace.href = trailerUrl;
+                enlace.target = "_blank";
+
+                const img = document.createElement("img");
+                img.classList.add("poster");
+                img.src = poster;
+                img.alt = p.title;
+
+                enlace.appendChild(img);
+                item.appendChild(enlace);
+
+                const btn = document.createElement("button");
+                btn.classList.add("btn-desc");
+                btn.textContent = "Ver descripción";
+
+                const desc = document.createElement("div");
+                desc.classList.add("descripcion");
+                desc.innerHTML = `
+                    <p><strong>${p.title}</strong></p>
+                    <p>${p.overview || "Sin descripción disponible."}</p>
+                    <p><strong>Estreno:</strong> ${p.release_date}</p>
+                `;
+
+                btn.addEventListener("click", () => {
+                    desc.style.display = desc.style.display === "block" ? "none" : "block";
+                });
+
+                item.appendChild(btn);
+                item.appendChild(desc);
+
+                contenedor.appendChild(item);
+            });
+        }
+
+        // Búsqueda de películas por título
+        btnBuscar.addEventListener("click", () => {
+            const texto = inputBuscar.value.trim().toLowerCase();
+            if (!texto) {
+                mostrarPeliculas(todasLasPeliculas);
+                return;
+            }
+
+            const filtradas = todasLasPeliculas.filter(p =>
+                p.title && p.title.toLowerCase().includes(texto)
+            );
+
+            mostrarPeliculas(filtradas);
+        });
+
+        // Buscar presionando Enter
+        inputBuscar.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                btnBuscar.click();
+            }
+        });
+
+        // Botón Inicio: limpia búsqueda y restablece la lista completa
+        linkInicio.addEventListener("click", () => {
+            inputBuscar.value = "";
+            mostrarPeliculas(todasLasPeliculas);
+        });
+    </script>
+    
+
+</body>
+</html>
