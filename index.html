@@ -1,77 +1,92 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wireframe - CINE JMMV</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CINE - JMMV</title>
+ 
+<!-- ARCHIVO CSS -->
+<link rel="stylesheet" href="style.css">
+ 
 </head>
+ 
 <body>
-
-
-    <header>
-        <div class="logo">
-
-            <img src="CJMMV.png" alt="Logo Cine JMMV" width="150">
-
+ 
+<header class="barra-superior">
+    <div class="logo-titulo">
+        <img src="CJMMV.png" alt="Logo">
+        <h1>CINE - JMMV</h1>
+    </div>
+ 
+    <nav class="menu">
+        <a id="linkInicio">Inicio</a>
+        <a href="#peliculas">Películas</a>
+        <a href="#footerContacto">Contacto</a>
+ 
+        <select id="filtroGenero">
+            <option value="">Todos</option>
+            <option value="28">Acción</option>
+            <option value="12">Aventura</option>
+            <option value="16">Animación</option>
+            <option value="35">Comedia</option>
+            <option value="80">Crimen</option>
+            <option value="18">Drama</option>
+            <option value="27">Terror</option>
+            <option value="878">Ciencia Ficción</option>
+        </select>
+ 
+        <input id="buscar" type="text" placeholder="Buscar película...">
+        <button id="btnBuscar">Buscar</button>
+    </nav>
+</header>
+ 
+<div class="contenedor">
+    <h2 id="peliculas">Películas Recientes</h2>
+    <div class="grid" id="contenedor-peliculas"></div>
+</div>
+ 
+<div id="paginador"></div>
+ 
+<footer class="footer" id="footerContacto">
+    <div class="footer-contenido">
+ 
+        <div class="footer-col">
+            <h3>Desarrollador</h3>
+            <p><strong>José Mario Macuchapi Villa</strong></p>
+            <p>Proyecto creado en <strong>noviembre de 2025</strong>.</p>
+            <p>Página web creada como demostración de cine digital.</p>
         </div>
-
-        <nav>
-    
-               <ul>
-                <li>Inicio</li>
-                <li>Cartelera</li>
-                <li>Próximos Estrenos</li>
-                <li>Contacto</li>
-            </ul>
-        </nav>
-    </header>
-
-
-    <section class="buscador">
-        <h2>Buscador de Películas</h2>
-        <input type="text" placeholder="[Escribe el nombre de la película]">
-        <button>Buscar</button>
-    </section>
-
-
-    <main class="cartelera">
-        <h2>Películas en Cartelera</h2>
-
-        <div class="grid-cartelera">
-
-            <div class="pelicula">
-                <div class="imagen">Imagen</div>
-                <div class="info">
-                    <h3>Título</h3>
-                    <p>Descripción breve</p>
-                    <p>Horario</p>
-                </div>
-            </div>
-
-            <div class="pelicula">
-                <div class="imagen">Imagen</div>
-                <div class="info">
-                    <h3>Título</h3>
-                    <p>Descripción breve</p>
-                    <p>Horario</p>
-                </div>
-            </div>
-
-            <div class="pelicula">
-                <div class="imagen">Imagen</div>
-                <div class="info">
-                    <h3>Título</h3>
-                    <p>Descripción breve</p>
-                    <p>Horario</p>
-                </div>
-            </div>
-
+ 
+        <div class="footer-col">
+            <h3>Fuente de Datos (API)</h3>
+            <p>Las películas mostradas provienen de:</p>
+            <p><strong>The Movie Database (TMDB)</strong></p>
+            <p>Esta página usa la API de TMDB pero no está afiliada ni aprobada por TMDB.</p>
         </div>
-    </main>
-
-    <footer>
-        <p>© 2025 Cine JMMV – Todos los derechos reservados</p>
-    </footer>
-
+ 
+        <div class="footer-col">
+            <h3>Contacto</h3>
+            <p>📞 79135310</p>
+            <p>📧 josemariomacuchapivilla@gmail.com</p>
+            <p>📍 La Paz, Bolivia</p>
+        </div>
+ 
+        <div class="footer-col">
+            <h3>Enlaces</h3>
+            <a href="#inicio">Inicio</a><br>
+            <a href="#peliculas">Películas</a><br>
+            <a href="#footerContacto">Contacto</a>
+        </div>
+ 
+    </div>
+ 
+    <div class="footer-copy">
+        <p>© Noviembre 2025 - CINE JMMV. Todos los derechos reservados.</p>
+    </div>
+</footer>
+ 
+<!-- ARCHIVO JS -->
+<script src="script.js"></script>
+ 
 </body>
 </html>

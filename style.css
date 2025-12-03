@@ -1,0 +1,239 @@
+/* PALETA BASADA EN TU LOGO */
+:root {
+    --naranja: #E97A35;
+    --naranja-oscuro: #C65B1A;
+    --azul-petroleo: #2A4B5A;
+    --azul-verdoso: #4F7A82;
+    --crema: #F2E3C6;
+    --azul-profundo: #1A2F36;
+}
+ 
+/* FONDO,TEXTO */
+body {
+    background: var(--azul-profundo);
+    color: var(--crema);
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+ 
+/* BARRA SUPERIOR */
+.barra-superior {
+    background: var(--azul-petroleo);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--naranja-oscuro);
+}
+ 
+/* LOGO,TÍTULO */
+.logo-titulo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+ 
+.logo-titulo img {
+    width: 70px;
+}
+ 
+.logo-titulo h1 {
+    margin: 0;
+    font-size: 40px;
+    font-family: Impact, Arial Black, sans-serif;
+    color: var(--naranja);
+}
+ 
+/* MENÚ */
+nav.menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+ 
+nav.menu a {
+    color: var(--crema);
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+ 
+nav.menu input, nav.menu select {
+    padding: 6px;
+    border-radius: 6px;
+    border: none;
+}
+ 
+/* BOTÓN DE BUSCAR */
+nav.menu button {
+    background: var(--naranja);
+    color: var(--crema);
+    cursor: pointer;
+    font-family: Impact, Arial Black, sans-serif;
+    border: 3px solid var(--naranja-oscuro);
+}
+ 
+nav.menu button:hover {
+    background: var(--naranja-oscuro);
+}
+ 
+/* CONTENEDOR */
+.contenedor {
+    padding: 20px;
+}
+ 
+h2 {
+    font-family: Impact, Arial Black, sans-serif;
+    color: var(--naranja);
+}
+ 
+/* GRID */
+.grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:20px;
+}
+ 
+/* CARDS DE PELÍCULAS */
+.item {
+    background: var(--azul-verdoso);
+    border-radius: 10px;
+    padding: 10px;
+    border: 2px solid var(--naranja-oscuro);
+}
+ 
+.poster {
+    width: 100%;
+    border-radius: 10px;
+}
+ 
+/* BOTÓN VER DESCRIPCIÓN */
+.btn-desc {
+    background: var(--naranja);
+    color: var(--crema);
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    margin-top: 8px;
+    cursor: pointer;
+    font-family: Impact, Arial Black, sans-serif;
+}
+ 
+.btn-desc:hover {
+    background: var(--naranja-oscuro);
+}
+ 
+/* DESCRIPCIÓN */
+.descripcion {
+    display: none;
+    background: var(--azul-petroleo);
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+ 
+/* PAGINADOR */
+#paginador {
+    text-align: center;
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+ 
+#paginador button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: var(--azul-verdoso);
+    color: var(--crema);
+    font-family: Impact, Arial Black, sans-serif;
+}
+ 
+#paginador .activo {
+    background: var(--naranja);
+}
+ 
+/* FOOTER */
+.footer {
+    background:#0d131f;
+    color:#d2d6e0;
+    padding:40px 20px 10px;
+    margin-top:40px;
+}
+ 
+.footer-contenido {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:30px;
+    max-width:1200px;
+    margin:auto;
+}
+ 
+.footer-col h3 {
+    color:white;
+}
+ 
+.footer-copy {
+    border-top:1px solid #1c2635;
+    margin-top:20px;
+    padding-top:10px;
+    text-align:center;
+    font-size:14px;
+    color:#8b96a9;
+}
+ 
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .logo-titulo h1 {
+        font-size: 32px;
+    }
+    nav.menu {
+        gap: 10px;
+    }
+    nav.menu input, nav.menu select {
+        width: 140px;
+    }
+}
+ 
+@media (max-width: 480px) {
+    .barra-superior {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+ 
+    .logo-titulo {
+        flex-direction: column;
+    }
+ 
+    .logo-titulo img {
+        width: 60px;
+    }
+ 
+    .logo-titulo h1 {
+        font-size: 28px;
+    }
+ 
+    nav.menu {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+ 
+    nav.menu input, nav.menu select {
+        width: 90%;
+    }
+ 
+    #paginador {
+        flex-wrap: wrap;
+    }
+ 
+    #paginador button {
+        width: 50px;
+    }
+}
