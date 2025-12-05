@@ -4,7 +4,6 @@ const API_KEY = "912dd0733c76e627da6361f7bc7a8797";
 const contenedor = document.getElementById("contenedor-peliculas");
 const filtro = document.getElementById("filtroGenero");
 const buscar = document.getElementById("buscar");
-const btnBuscar = document.getElementById("btnBuscar");
 const paginador = document.getElementById("paginador");
 const linkInicio = document.getElementById("linkInicio");
 
@@ -12,27 +11,52 @@ let paginaActual = 1;
 let genero = "";
 const TOTAL_PAGINAS = 3;
 let paginas = [];
+let todasPeliculas = [];
 
 /* CARGA INICIAL */
 async function cargarPopulares() {
     paginas = [];
+    todasPeliculas = [];
     for (let i = 1; i <= TOTAL_PAGINAS; i++) {
         const r = await fetch(
             `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-ES&page=${i}`
         );
-        paginas[i] = (await r.json()).results;
+        const resultados = (await r.json()).results;
+        paginas[i] = resultados;
+        todasPeliculas = todasPeliculas.concat(resultados);
     }
-    mostrar(paginas[paginaActual]);
-    crearPaginador();
+    aplicarBusqueda();
 }
 
 /* POR GÉNERO */
 async function cargarGenero() {
-    const r = await fetch(
-        `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-ES&with_genres=${genero}&page=${paginaActual}`
-    );
-    mostrar((await r.json()).results);
-    crearPaginador();
+    todasPeliculas = [];
+    paginas = [];
+    for (let i = 1; i <= TOTAL_PAGINAS; i++) {
+        const r = await fetch(
+            `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-ES&with_genres=${genero}&page=${i}`
+        );
+        const resultados = (await r.json()).results;
+        paginas[i] = resultados;
+        todasPeliculas = todasPeliculas.concat(resultados);
+    }
+    aplicarBusqueda();
+}
+
+/* APLICAR BÚSQUEDA */
+function aplicarBusqueda() {
+    const termino = buscar.value.trim().toLowerCase();
+    
+    if (termino) {
+        const filtradas = todasPeliculas.filter(p => 
+            p.title.toLowerCase().includes(termino)
+        );
+        mostrar(filtradas);
+        paginador.innerHTML = "";
+    } else {
+        mostrar(paginas[paginaActual]);
+        crearPaginador();
+    }
 }
 
 /* MOSTRAR PELÍCULAS */
@@ -101,7 +125,8 @@ function crearPaginador() {
 
 function cambiar(n) {
     paginaActual = n;
-    genero ? cargarGenero() : mostrar(paginas[paginaActual]);
+    buscar.value = "";
+    mostrar(paginas[paginaActual]);
     crearPaginador();
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -110,18 +135,23 @@ function cambiar(n) {
 filtro.onchange = () => {
     genero = filtro.value;
     paginaActual = 1;
+    buscar.value = "";
     genero ? cargarGenero() : cargarPopulares();
 };
 
-btnBuscar.onclick = () => {
-    const t = buscar.value.trim().toLowerCase();
-    if (!t) return genero ? cargarGenero() : mostrar(paginas[paginaActual]);
-
-    const lista = genero ? [] : paginas[paginaActual];
-    mostrar(lista.filter(p => p.title.toLowerCase().includes(t)));
+let tiempoEspera;
+buscar.oninput = () => {
+    clearTimeout(tiempoEspera);
+    tiempoEspera = setTimeout(() => {
+        aplicarBusqueda();
+    }, 300);
 };
 
-buscar.onkeydown = e => e.key === "Enter" && btnBuscar.click();
+buscar.onkeydown = e => {
+    if (e.key === "Enter") {
+        aplicarBusqueda();
+    }
+};
 
 linkInicio.onclick = () => {
     paginaActual = 1;
