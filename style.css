@@ -58,12 +58,26 @@ nav.menu a {
     text-decoration: none;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+nav.menu a:hover {
+    color: var(--naranja);
+    transform: translateY(-2px);
 }
  
 nav.menu input, nav.menu select {
     padding: 6px;
     border-radius: 6px;
     border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+nav.menu input:focus, nav.menu select:focus {
+    outline: 2px solid var(--naranja);
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(233, 122, 53, 0.5);
 }
  
 /* CONTENEDOR */
@@ -89,11 +103,35 @@ h2 {
     border-radius: 10px;
     padding: 10px;
     border: 2px solid var(--naranja-oscuro);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: aparecer 0.5s ease;
+}
+
+.item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(233, 122, 53, 0.3);
 }
  
 .poster {
     width: 100%;
     border-radius: 10px;
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+
+.item:hover .poster {
+    transform: scale(1.1);
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
  
 /* BOTÓN VER DESCRIPCIÓN */
@@ -107,10 +145,12 @@ h2 {
     margin-top: 8px;
     cursor: pointer;
     font-family: Impact, Arial Black, sans-serif;
+    transition: transform 0.2s ease, background 0.2s ease;
 }
  
 .btn-desc:hover {
     background: var(--naranja-oscuro);
+    transform: scale(1.05);
 }
  
 /* DESCRIPCIÓN */
@@ -120,6 +160,18 @@ h2 {
     padding: 10px;
     border-radius: 6px;
     margin-top: 10px;
+    animation: deslizar 0.3s ease;
+}
+
+@keyframes deslizar {
+    from {
+        opacity: 0;
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        max-height: 500px;
+    }
 }
  
 /* PAGINADOR */
@@ -139,10 +191,22 @@ h2 {
     background: var(--azul-verdoso);
     color: var(--crema);
     font-family: Impact, Arial Black, sans-serif;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#paginador button:hover:not(:disabled) {
+    transform: scale(1.1);
+    background: var(--naranja);
 }
  
 #paginador .activo {
     background: var(--naranja);
+    transform: scale(1.15);
+}
+
+#paginador button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
  
 /* FOOTER */
