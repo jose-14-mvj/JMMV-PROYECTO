@@ -52,6 +52,18 @@ nav.menu {
     gap: 15px;
     flex-wrap: wrap;
 }
+
+/* BOTÓN HAMBURGUESA SIMPLE */
+.hamburguesa {
+    display: none;
+    background: var(--naranja);
+    color: var(--crema);
+    border: none;
+    font-size: 30px;
+    padding: 5px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
  
 nav.menu a {
     color: var(--crema);
@@ -238,46 +250,46 @@ h2 {
     color:#8b96a9;
 }
  
-/* RESPONSIVE */
+/* ==================== RESPONSIVE ==================== */
+/* Solo cambios para CELULAR */
 @media (max-width: 768px) {
     .logo-titulo h1 {
         font-size: 32px;
     }
-    nav.menu {
-        gap: 10px;
+    
+    /* MOSTRAR botón hamburguesa */
+    .hamburguesa {
+        display: block;
     }
-    nav.menu input, nav.menu select {
-        width: 140px;
+    
+    /* OCULTAR menú por defecto */
+    nav.menu {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px 0;
+    }
+    
+    /* MOSTRAR menú cuando está abierto */
+    nav.menu.abierto {
+        display: flex;
+    }
+    
+    nav.menu a, nav.menu input, nav.menu select {
+        width: 90%;
+        text-align: center;
+        padding: 10px;
     }
 }
  
 @media (max-width: 480px) {
-    .barra-superior {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-    }
- 
-    .logo-titulo {
-        flex-direction: column;
-    }
- 
     .logo-titulo img {
-        width: 60px;
+        width: 50px;
     }
  
     .logo-titulo h1 {
-        font-size: 28px;
-    }
- 
-    nav.menu {
-        flex-direction: column;
-        width: 100%;
-        gap: 10px;
-    }
- 
-    nav.menu input, nav.menu select {
-        width: 90%;
+        font-size: 24px;
     }
  
     #paginador {

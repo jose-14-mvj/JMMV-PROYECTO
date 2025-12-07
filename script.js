@@ -7,11 +7,25 @@ const buscar = document.getElementById("buscar");
 const paginador = document.getElementById("paginador");
 const linkInicio = document.getElementById("linkInicio");
 
+// PARA EL MENÚ HAMBURGUESA
+const btnMenu = document.getElementById("btnMenu");
+const menu = document.getElementById("menu");
+
 let paginaActual = 1;
 let genero = "";
 const TOTAL_PAGINAS = 3;
 let paginas = [];
 let todasPeliculas = [];
+
+/* ========== MENÚ HAMBURGUESA - SUPER SIMPLE ========== */
+btnMenu.onclick = function() {
+    // Si tiene la clase "abierto", la quita. Si no la tiene, la agrega.
+    if (menu.classList.contains("abierto")) {
+        menu.classList.remove("abierto");
+    } else {
+        menu.classList.add("abierto");
+    }
+};
 
 /* CARGA INICIAL */
 async function cargarPopulares() {
