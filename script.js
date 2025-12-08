@@ -1,4 +1,4 @@
-/* API TMDB */
+//API TMDB
 const API_KEY = "912dd0733c76e627da6361f7bc7a8797";
 
 const contenedor = document.getElementById("contenedor-peliculas");
@@ -7,7 +7,7 @@ const buscar = document.getElementById("buscar");
 const paginador = document.getElementById("paginador");
 const linkInicio = document.getElementById("linkInicio");
 
-// PARA EL MENÚ HAMBURGUESA
+
 const btnMenu = document.getElementById("btnMenu");
 const menu = document.getElementById("menu");
 
@@ -17,9 +17,9 @@ const TOTAL_PAGINAS = 3;
 let paginas = [];
 let todasPeliculas = [];
 
-/* ========== MENÚ HAMBURGUESA - SUPER SIMPLE ========== */
+//MENÚ HAMBURGUESA
 btnMenu.onclick = function() {
-    // Si tiene la clase "abierto", la quita. Si no la tiene, la agrega.
+   
     if (menu.classList.contains("abierto")) {
         menu.classList.remove("abierto");
     } else {
@@ -27,7 +27,7 @@ btnMenu.onclick = function() {
     }
 };
 
-/* CARGA INICIAL */
+// CARGA INICIAL
 async function cargarPopulares() {
     paginas = [];
     todasPeliculas = [];
@@ -42,7 +42,7 @@ async function cargarPopulares() {
     aplicarBusqueda();
 }
 
-/* POR GÉNERO */
+//POR GÉNERO
 async function cargarGenero() {
     todasPeliculas = [];
     paginas = [];
@@ -57,7 +57,7 @@ async function cargarGenero() {
     aplicarBusqueda();
 }
 
-/* APLICAR BÚSQUEDA */
+//APLICAR BÚSQUEDA
 function aplicarBusqueda() {
     const termino = buscar.value.trim().toLowerCase();
     
@@ -73,7 +73,7 @@ function aplicarBusqueda() {
     }
 }
 
-/* MOSTRAR PELÍCULAS */
+//MOSTRAR PELÍCULAS
 function mostrar(lista) {
     contenedor.innerHTML = "";
 
@@ -112,7 +112,7 @@ function mostrar(lista) {
     });
 }
 
-/* PAGINADOR */
+//PAGINADOR
 function crearPaginador() {
     paginador.innerHTML = "";
 
@@ -145,7 +145,7 @@ function cambiar(n) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/* EVENTOS */
+//EVENTOS
 filtro.onchange = () => {
     genero = filtro.value;
     paginaActual = 1;
@@ -174,6 +174,4 @@ linkInicio.onclick = () => {
     buscar.value = "";
     cargarPopulares();
 };
-
-/* INICIO */
 cargarPopulares();

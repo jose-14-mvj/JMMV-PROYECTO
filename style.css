@@ -1,4 +1,4 @@
-/* PALETA BASADA EN TU LOGO */
+/* PALETA*/
 :root {
     --naranja: #E97A35;
     --naranja-oscuro: #C65B1A;
@@ -13,7 +13,7 @@ body {
     background: var(--azul-profundo);
     color: var(--crema);
     font-family: Arial, sans-serif;
-    margin: 0;
+    margin: 0;  
 }
  
 /* BARRA SUPERIOR */
@@ -53,7 +53,7 @@ nav.menu {
     flex-wrap: wrap;
 }
 
-/* BOTÓN HAMBURGUESA SIMPLE */
+/* BOTÓN HAMBURGUESA*/
 .hamburguesa {
     display: none;
     background: var(--naranja);
@@ -249,20 +249,18 @@ h2 {
     font-size:14px;
     color:#8b96a9;
 }
- 
-/* ==================== RESPONSIVE ==================== */
-/* Solo cambios para CELULAR */
+
 @media (max-width: 768px) {
     .logo-titulo h1 {
         font-size: 32px;
     }
     
-    /* MOSTRAR botón hamburguesa */
+    /*  botón hamburguesa */
     .hamburguesa {
         display: block;
     }
     
-    /* OCULTAR menú por defecto */
+    /* OCULTAR menú  */
     nav.menu {
         display: none;
         width: 100%;
