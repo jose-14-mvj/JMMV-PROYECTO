@@ -7,74 +7,90 @@ const buscar = document.getElementById("buscar");
 const paginador = document.getElementById("paginador");
 const linkInicio = document.getElementById("linkInicio");
 
-
 const btnMenu = document.getElementById("btnMenu");
 const menu = document.getElementById("menu");
 
+const modal = document.getElementById("modal");
+const modalTitulo = document.getElementById("modalTitulo");
+const modalDesc = document.getElementById("modalDesc");
+const modalFecha = document.getElementById("modalFecha");
+const cerrarModal = document.getElementById("cerrarModal");
+
 let paginaActual = 1;
 let genero = "";
-const TOTAL_PAGINAS = 3;
-let paginas = [];
 let todasPeliculas = [];
+const PELICULAS_POR_PAGINA = 15;
+const MAX_PELICULAS = 200;
 
 //MENÚ HAMBURGUESA
 btnMenu.onclick = function() {
-   
-    if (menu.classList.contains("abierto")) {
-        menu.classList.remove("abierto");
-    } else {
-        menu.classList.add("abierto");
+    menu.classList.toggle("abierto");
+};
+
+// CERRAR MODAL
+cerrarModal.onclick = function() {
+    modal.style.display = "none";
+};
+
+// Cerrar modal al hacer clic fuera del contenido
+window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
     }
 };
 
 // CARGA INICIAL
 async function cargarPopulares() {
-    paginas = [];
     todasPeliculas = [];
-    for (let i = 1; i <= TOTAL_PAGINAS; i++) {
+    let paginaTMDB = 1;
+
+    while (todasPeliculas.length < MAX_PELICULAS) {
         const r = await fetch(
-            `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-ES&page=${i}`
+            `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=es-ES&page=${paginaTMDB}`
         );
         const resultados = (await r.json()).results;
-        paginas[i] = resultados;
+        if (!resultados || resultados.length === 0) break;
         todasPeliculas = todasPeliculas.concat(resultados);
+        paginaTMDB++;
     }
+
     aplicarBusqueda();
 }
 
-//POR GÉNERO
+// POR GÉNERO
 async function cargarGenero() {
     todasPeliculas = [];
-    paginas = [];
-    for (let i = 1; i <= TOTAL_PAGINAS; i++) {
+    let paginaTMDB = 1;
+
+    while (todasPeliculas.length < MAX_PELICULAS) {
         const r = await fetch(
-            `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-ES&with_genres=${genero}&page=${i}`
+            `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=es-ES&with_genres=${genero}&page=${paginaTMDB}`
         );
         const resultados = (await r.json()).results;
-        paginas[i] = resultados;
+        if (!resultados || resultados.length === 0) break;
         todasPeliculas = todasPeliculas.concat(resultados);
+        paginaTMDB++;
     }
+
     aplicarBusqueda();
 }
 
-//APLICAR BÚSQUEDA
+// APLICAR BÚSQUEDA
 function aplicarBusqueda() {
     const termino = buscar.value.trim().toLowerCase();
-    
+
+    let lista = todasPeliculas;
+
     if (termino) {
-        const filtradas = todasPeliculas.filter(p => 
-            p.title.toLowerCase().includes(termino)
-        );
-        mostrar(filtradas);
-        paginador.innerHTML = "";
-    } else {
-        mostrar(paginas[paginaActual]);
-        crearPaginador();
+        lista = todasPeliculas.filter(p => p.title.toLowerCase().includes(termino));
     }
+
+    mostrarPagina(lista, paginaActual);
+    crearPaginador(lista);
 }
 
-//MOSTRAR PELÍCULAS
-function mostrar(lista) {
+// MOSTRAR PELÍCULAS
+function mostrarPagina(lista, pagina) {
     contenedor.innerHTML = "";
 
     if (!lista?.length) {
@@ -82,10 +98,14 @@ function mostrar(lista) {
         return;
     }
 
-    lista.forEach(p => {
+    const inicio = (pagina - 1) * PELICULAS_POR_PAGINA;
+    const fin = inicio + PELICULAS_POR_PAGINA;
+    const subLista = lista.slice(inicio, fin);
+
+    subLista.forEach(p => {
         const poster = p.poster_path
             ? `https://image.tmdb.org/t/p/w500${p.poster_path}`
-            : "https://via.placeholder.com/500x750?text=Sin Imagen";
+            : "https://via.placeholder.com/500x750?text=Sin+Imagen";
 
         const item = document.createElement("div");
         item.className = "item";
@@ -96,56 +116,74 @@ function mostrar(lista) {
                 <img src="${poster}" class="poster">
             </a>
             <button class="btn-desc">Ver descripción</button>
-            <div class="descripcion">
-                <p><strong>${p.title}</strong></p>
-                <p>${p.overview || "Sin descripción disponible."}</p>
-                <p><strong>Estreno:</strong> ${p.release_date}</p>
-            </div>
         `;
 
+        // Evento para abrir el modal con la descripción
         item.querySelector(".btn-desc").onclick = () => {
-            const d = item.querySelector(".descripcion");
-            d.style.display = d.style.display === "block" ? "none" : "block";
+            modalTitulo.textContent = p.title;
+            modalDesc.textContent = p.overview || "Sin descripción disponible.";
+            modalFecha.innerHTML = `<strong>Estreno:</strong> ${p.release_date || "Fecha no disponible"}`;
+            modal.style.display = "flex";
         };
 
         contenedor.appendChild(item);
     });
 }
 
-//PAGINADOR
-function crearPaginador() {
+// PAGINADOR
+function crearPaginador(lista) {
     paginador.innerHTML = "";
+    if (!lista) lista = todasPeliculas;
 
-    const crearBtn = (txt, dis, fn) => {
+    const totalPaginas = Math.ceil(lista.length / PELICULAS_POR_PAGINA);
+    if (totalPaginas <= 1) return;
+
+    const maxVisibles = 5; // cantidad de botones directos visibles
+
+    function addBtn(txt, pagina, activo = false, disabled = false) {
         const b = document.createElement("button");
         b.textContent = txt;
-        b.disabled = dis;
-        b.onclick = fn;
-        paginador.appendChild(b);
-    };
-
-    crearBtn("Anterior", paginaActual === 1, () => cambiar(paginaActual - 1));
-
-    for (let i = 1; i <= TOTAL_PAGINAS; i++) {
-        const b = document.createElement("button");
-        b.textContent = i;
-        b.classList.toggle("activo", i === paginaActual);
-        b.onclick = () => cambiar(i);
+        if (activo) b.classList.add("activo");
+        b.disabled = disabled;
+        if (!disabled && pagina) b.onclick = () => cambiarPagina(pagina);
         paginador.appendChild(b);
     }
 
-    crearBtn("Siguiente", paginaActual === TOTAL_PAGINAS, () => cambiar(paginaActual + 1));
+    addBtn("<", paginaActual - 1, false, paginaActual === 1);
+
+    addBtn("1", 1, paginaActual === 1);
+
+    if (paginaActual > 3)
+        addBtn("...", null, false, true);
+
+    const inicio = Math.max(2, paginaActual - 1);
+    const fin = Math.min(totalPaginas - 1, paginaActual + 1);
+
+    for (let i = inicio; i <= fin; i++) {
+        addBtn(i, i, i === paginaActual);
+    }
+
+    // si estamos lejos del final: ...
+    if (paginaActual < totalPaginas - 2)
+        addBtn("...", null, false, true);
+
+    // siempre última
+    if (totalPaginas > 1)
+        addBtn(totalPaginas, totalPaginas, paginaActual === totalPaginas);
+
+    // siguiente
+    addBtn(">", paginaActual + 1, false, paginaActual === totalPaginas);
 }
 
-function cambiar(n) {
+
+// CAMBIAR PÁGINA
+function cambiarPagina(n) {
     paginaActual = n;
-    buscar.value = "";
-    mostrar(paginas[paginaActual]);
-    crearPaginador();
+    aplicarBusqueda();
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-//EVENTOS
+// EVENTOS
 filtro.onchange = () => {
     genero = filtro.value;
     paginaActual = 1;
@@ -157,12 +195,14 @@ let tiempoEspera;
 buscar.oninput = () => {
     clearTimeout(tiempoEspera);
     tiempoEspera = setTimeout(() => {
+        paginaActual = 1;
         aplicarBusqueda();
     }, 300);
 };
 
 buscar.onkeydown = e => {
     if (e.key === "Enter") {
+        paginaActual = 1;
         aplicarBusqueda();
     }
 };
@@ -174,4 +214,6 @@ linkInicio.onclick = () => {
     buscar.value = "";
     cargarPopulares();
 };
+
+// CARGA INICIAL
 cargarPopulares();

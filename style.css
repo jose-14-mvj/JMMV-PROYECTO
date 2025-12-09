@@ -223,31 +223,45 @@ h2 {
  
 /* FOOTER */
 .footer {
-    background:#0d131f;
-    color:#d2d6e0;
-    padding:40px 20px 10px;
-    margin-top:40px;
+    background: var(--azul-profundo);
+    color: var(--crema);
+    padding: 40px 20px 10px;
+    margin-top: 40px;
+    border-top: 3px solid var(--naranja-oscuro);
 }
  
 .footer-contenido {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:30px;
-    max-width:1200px;
-    margin:auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: auto;
 }
  
 .footer-col h3 {
-    color:white;
+    color: var(--naranja);
+    font-family: Impact, Arial Black, sans-serif;
+    margin-bottom: 15px;
+}
+
+.footer-col a {
+    color: var(--crema);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-col a:hover {
+    color: var(--naranja);
 }
  
 .footer-copy {
-    border-top:1px solid #1c2635;
-    margin-top:20px;
-    padding-top:10px;
-    text-align:center;
-    font-size:14px;
-    color:#8b96a9;
+    border-top: 2px solid var(--azul-petroleo);
+    margin-top: 20px;
+    padding-top: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--crema);
+    opacity: 0.8;
 }
 
 @media (max-width: 768px) {
@@ -297,4 +311,40 @@ h2 {
     #paginador button {
         width: 50px;
     }
+}
+
+/* MODAL SENCILLO */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-contenido {
+    background: var(--azul-verdoso);
+    padding: 20px;
+    max-width: 350px;
+    border-radius: 10px;
+    border: 2px solid var(--naranja);
+}
+
+.cerrar {
+    float: right;
+    cursor: pointer;
+    font-size: 22px;
+    color: var(--crema);
+}
+
+/* PAGINADOR FIJO */
+#paginador {
+    position: sticky;
+    bottom: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    z-index: 10;
 }
